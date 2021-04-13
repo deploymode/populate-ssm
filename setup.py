@@ -4,7 +4,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="populate-ssm",  # Replace with your own username
+    name="populate_ssm",
     version="0.1.0",
     author="Joe Niland",
     author_email="joe@deploymode.com",
@@ -20,8 +20,8 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    package_dir={"": "populate_ssm"},
-    packages=setuptools.find_packages(where="populate_ssm"),
+    package_dir={"": "src"},
+    packages=setuptools.find_packages(where="src"),
     python_requires=">=3.6",
     install_requires=["boto3", "python-dotenv"],
     entry_points={
