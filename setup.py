@@ -24,5 +24,9 @@ setuptools.setup(
     packages=setuptools.find_packages(where="populate_ssm"),
     python_requires=">=3.6",
     install_requires=["boto3", "python-dotenv"],
-    scripts=["bin/populate-ssm"],
+    entry_points={
+        "console_scripts": [
+            "populate-ssm=populate_ssm",
+        ],
+    },
 )
