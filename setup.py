@@ -26,7 +26,7 @@ setuptools.setup(
     install_requires=["boto3", "python-dotenv"],
     entry_points={
         "console_scripts": [
-            "populate-ssm = populate_ssm:main",
+            "populate-ssm = populate_ssm.__main__:main",
         ],
     },
 )
