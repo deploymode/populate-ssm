@@ -1,0 +1,6 @@
+#!/usr/bin/env python
+
+import populate_ssm
+import sys
+
+populate_ssm(sys.argv)

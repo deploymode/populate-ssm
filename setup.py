@@ -20,8 +20,9 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    package_dir={"": "src"},
-    packages=setuptools.find_packages(where="src"),
+    package_dir={"": "populate_ssm"},
+    packages=setuptools.find_packages(where="populate_ssm"),
     python_requires=">=3.6",
     install_requires=["boto3", "python-dotenv"],
+    scripts=["bin/populate-ssm"],
 )
