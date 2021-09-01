@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="populate_ssm",
-    version="0.1.0",
+    version="0.2.0",
     author="Joe Niland",
     author_email="joe@deploymode.com",
     description="Populate AWS SSM Parameter Store from .env File",
@@ -23,7 +23,8 @@ setuptools.setup(
     package_dir={"": "src"},
     packages=setuptools.find_packages(where="src"),
     python_requires=">=3.6",
-    install_requires=["boto3", "python-dotenv"],
+    install_requires=["boto3==1.18.33", "python-dotenv==0.19.0"],
+    setup_requires=["flake8"],
     entry_points={
         "console_scripts": [
             "populate-ssm = populate_ssm.__main__:main",
