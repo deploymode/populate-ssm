@@ -51,6 +51,10 @@ def main():
             print("Skipping {}".format(key))
             continue
 
+        if len(value) == 0:
+            print("Skipping {} due to empty value".format(key))
+            continue
+
         paramPath = "{}/{}".format(args.paramStorePrefix, key)
         response = client.put_parameter(
             Name=paramPath, Value=value, Type="SecureString", Overwrite=True
