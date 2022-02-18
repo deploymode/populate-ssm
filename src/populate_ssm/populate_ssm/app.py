@@ -51,7 +51,7 @@ def main():
             print("Skipping {}".format(key))
             continue
 
-        if len(value) == 0:
+        if not value or len(value) == 0:
             print("Skipping {} due to empty value".format(key))
             continue
 

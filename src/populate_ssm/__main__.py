@@ -4,7 +4,7 @@
 
 
 def main():
-    from .app import main
+    from populate_ssm.app import main
 
     main()
 

@@ -25,6 +25,11 @@ source venv/bin/activate
 python -m pip install -e "git+https://github.com/deploymode/populate-ssm.git/#egg=populate-ssm"
 ```
 
+## Testing
+
+ave om-staging-admin -- python src/populate_ssm/__main__.py test/one.env /myorg/test/app
+
+
 ## Usage Example
 
 ```shell
