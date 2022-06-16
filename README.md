@@ -1,11 +1,14 @@
-Populate AWS SSM Parameter Store from .env File
+Populate AWS SSM Parameter Store from .env or .json files
 =================================================
 
 ## Prerequisites
 
 * Python3
 * virtualenv
-* aws-vault
+
+### Recommended
+
+* aws-vault or leapp-cli
 
 ## Set up
 
