@@ -1,12 +1,17 @@
+import json
+import os
+from typing import OrderedDict
 from dotenv import dotenv_values
 import argparse
+import botocore
 import boto3
 
 
 def main():
 
-    parser = argparse.ArgumentParser(description="Populate parameter store")
-    parser.add_argument("envFilePath", metavar="E", help="Path to .env file")
+    parser = argparse.ArgumentParser(description="Populate parameter store from .env and/or .json file")
+    parser.add_argument("--env-file", required=False, help="Path to .env file")
+    parser.add_argument("--json-file", required=False, help="Path to .json file containing an array of key/value objects")
     parser.add_argument(
         "paramStorePrefix", metavar="P", help="Path prefix for parameter store"
     )
@@ -25,10 +30,23 @@ def main():
 
     args = parser.parse_args()
 
-    print("Loading env vars from {}".format(args.envFilePath))
+    env_values = OrderedDict()
 
-    env_path = args.envFilePath
-    env_values = dotenv_values(dotenv_path=env_path)
+    if args.env_file:
+        print("Loading env vars from {}".format(args.env_file))
+        try:
+            env_values = dotenv_values(dotenv_path=args.env_file)
+        except IOError:
+            print(".env file does not exist")
+
+
+    if args.json_file:
+        print("Loading env vars from {}".format(args.json_file))
+        env_values.update(load_env_vars_from_json(args.json_file))
+
+    if not env_values:
+        print("Nothing to write")
+        return
 
     env_vars_to_include = []
     env_vars_to_exclude = []
@@ -56,9 +74,15 @@ def main():
             continue
 
         paramPath = "{}/{}".format(args.paramStorePrefix, key)
-        response = client.put_parameter(
-            Name=paramPath, Value=value, Type="SecureString", Overwrite=True
-        )
+        try:
+            response = client.put_parameter(
+               Name=paramPath, Value=value, Type="SecureString", Overwrite=True
+            )
+        except botocore.exceptions.ClientError as e:
+            print(e)
+            print("AWS client error - do you have valid tokens set in the env?")
+            return
+
         # print(response)
         if response["ResponseMetadata"]["HTTPStatusCode"] == 200:
             print("Wrote {}".format(paramPath))
@@ -66,6 +90,21 @@ def main():
             print("Failed to write {}".format(paramPath))
 
     print("Done")
+
+def load_env_vars_from_json(json_file_path):
+    if not os.path.exists(json_file_path):
+        print("JSON file path does not exist")
+        return OrderedDict([])
+
+    f = open(json_file_path)
+
+    json_data = json.load(f)
+
+    f.close()
+
+    data = [(k, d[k]) for d in json_data for k in d]
+
+    return OrderedDict(data)
 
 
 if __name__ == "__main__":
