@@ -12,12 +12,20 @@ Populate AWS SSM Parameter Store from .env or .json files
 
 ## Set up
 
-### Local install
+### Dev install
 
 ```shell
 virtualenv venv
 source venv/bin/activate
 pip install -r requirements.txt
+```
+
+### Local install (for usage)
+
+To install a script in `/usr/local/bin/populate-ssm`:
+
+```shell
+pip3 install .
 ```
 
 ### Install from git
