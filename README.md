@@ -30,11 +30,22 @@ pip3 install .
 
 ### Install from git
 
+The easiest way is by using pipx.
+
+If you don't have pipx, you can install it with:
+
 ```shell
-virtualenv venv
-source venv/bin/activate
-python -m pip install -e "git+https://github.com/deploymode/populate-ssm.git/#egg=populate-ssm"
+python3 -m pip install --upgrade pip
+python3 -m pipx ensurepath
+# Reload your shell
 ```
+
+Now install `populate-ssm`:
+```shell
+pipx install git+https://github.com/deploymode/populate-ssm.git
+```
+
+By default, this will install the tool in `~/.local/bin/populate-ssm`.
 
 ## Testing
 
