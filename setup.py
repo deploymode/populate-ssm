@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="populate_ssm",
-    version="0.3.1",
+    version="0.3.4",
     author="Joe Niland",
     author_email="joe@deploymode.com",
     description="Populate AWS SSM Parameter Store from .env File",
