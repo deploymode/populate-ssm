@@ -67,7 +67,8 @@ def main():
         env_vars_to_exclude = args.exclude.split(",")
         print("Excluding: {}".format("; ".join(env_vars_to_exclude)))
 
-    if args.paramStorePrefix.endswith("/"):
+    paramStorePrefix = args.paramStorePrefix
+    if paramStorePrefix.endswith("/"):
         print("Removing trailing slash from param store prefix")
         paramStorePrefix = args.paramStorePrefix[:-1]
 
