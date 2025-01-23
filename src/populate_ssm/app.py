@@ -1,19 +1,28 @@
+import argparse
 import json
 import os
 from typing import OrderedDict
-from dotenv import dotenv_values
-import argparse
-import botocore
+
 import boto3
+import botocore
+from dotenv import dotenv_values
 
 
 def main():
 
-    parser = argparse.ArgumentParser(description="Populate parameter store from .env and/or .json file")
+    parser = argparse.ArgumentParser(
+        description="Populate parameter store from .env and/or .json file"
+    )
     parser.add_argument("--env-file", required=False, help="Path to .env file")
-    parser.add_argument("--json-file", required=False, help="Path to .json file containing an array of key/value objects")
     parser.add_argument(
-        "paramStorePrefix", metavar="P", help="Path prefix for parameter store"
+        "--json-file",
+        required=False,
+        help="Path to .json file containing an array of key/value objects",
+    )
+    parser.add_argument(
+        "paramStorePrefix",
+        metavar="P",
+        help="Path prefix for parameter store. Do not include trailing slash.",
     )
     parser.add_argument(
         "--include",
@@ -39,7 +48,6 @@ def main():
         except IOError:
             print(".env file does not exist")
 
-
     if args.json_file:
         print("Loading env vars from {}".format(args.json_file))
         env_values.update(load_env_vars_from_json(args.json_file))
@@ -59,7 +67,15 @@ def main():
         env_vars_to_exclude = args.exclude.split(",")
         print("Excluding: {}".format("; ".join(env_vars_to_exclude)))
 
+    if args.paramStorePrefix.endswith("/"):
+        print("Removing trailing slash from param store prefix")
+        paramStorePrefix = args.paramStorePrefix[:-1]
+
     client = boto3.client("ssm")
+
+    region = boto3.session.Session().region_name
+
+    print("Writing to region {}".format(region))
 
     for key, value in env_values.items():
         if len(env_vars_to_include) > 0 and key not in env_vars_to_include:
@@ -73,10 +89,10 @@ def main():
             print("Skipping {} due to empty value".format(key))
             continue
 
-        paramPath = "{}/{}".format(args.paramStorePrefix, key)
+        paramPath = "{}/{}".format(paramStorePrefix, key)
         try:
             response = client.put_parameter(
-               Name=paramPath, Value=value, Type="SecureString", Overwrite=True
+                Name=paramPath, Value=value, Type="SecureString", Overwrite=True
             )
         except botocore.exceptions.ClientError as e:
             print(e)
@@ -90,6 +106,7 @@ def main():
             print("Failed to write {}".format(paramPath))
 
     print("Done")
+
 
 def load_env_vars_from_json(json_file_path):
     if not os.path.exists(json_file_path):
