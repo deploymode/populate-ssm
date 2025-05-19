@@ -21,7 +21,6 @@ def main():
     )
     parser.add_argument(
         "paramStorePrefix",
-        metavar="P",
         help="Path prefix for parameter store. Do not include trailing slash.",
     )
     parser.add_argument(
